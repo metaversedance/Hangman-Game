@@ -1,3 +1,5 @@
+//Specifications:
+
 // 3. Use key events to listen for the letters that your players will type.
 
 // 4. Display the following on the page:
@@ -17,14 +19,23 @@
 // 9. After the user wins/loses the game should automatically choose another word and make the user play it.
 
 
-//it must listen for key events, and save that key
-//it must choose a word to be guessed
-//it must listen for a key is pressed to begin game
-//subsequent keys pressed should:
-	//if key pressed, numberOfGuesses -- 
-	//if key pressed is not in word, push letter to alreadyGuessedLetters
-	//if key pressed is in word, push letter to correct index of wordArray
-	//if length of 
+//requirments:
+
+//on page load it should initialize game model
+
+//it should set model state: 
+	//current word: generate random word to be guessed
+	//number of guesses left: assigned length of current word + 5
+	//lettersGuessed: empty array
+
+//on input, character should be added to letters guessed
+
+//subsequent key press should decriment number of guesses left
+
+//if all characters in current word are in letters guessed and numGuessLeft !== 0 
+	//user wins & reset game state
+
+//if number of guesses left reaches 0, reset game state
 
 	var wordLibrary = ["cat","dog","madonna"];
 
@@ -79,17 +90,19 @@
 
 	function onUserInput(event) {
 		var key = event.key.toLowerCase();
-
-		if (hangManModel.currentWord.indexOf(key) > -1 && hangManModel.lettersGuessed.indexOf(key)=== -1) {
-			hangManModel.lettersGuessed.push(key)
-		}
-
 		if (hangManModel.numGuessRemaining < 1 ) {
 			resetModel();
+			render()
 
 			hangManModel.keyPressedOnce = false;
 
 		}
+
+
+		if (hangManModel.lettersGuessed.indexOf(key)=== -1) {
+			hangManModel.lettersGuessed.push(key)
+		}
+
 
 	 	hangManModel.numGuessRemaining --;
 
