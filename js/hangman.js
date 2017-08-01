@@ -26,25 +26,23 @@
 	//if key pressed is in word, push letter to correct index of wordArray
 	//if length of 
 
-var wordLibrary = ["cat","dog","madonna"];
+	var wordLibrary = ["cat","dog","madonna"];
 
-var util = {
- 	//https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-	getRandomIntInclusive: function (min, max) {
-	  min = Math.ceil(min);
-	  max = Math.floor(max);
-	  return Math.floor(Math.random() * (max - min + 1)) + min;
-	},
- }
-
-var view = {
-	render: function() {
+	var util = {
+	 	//https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+		getRandomIntInclusive: function (min, max) {
+		  min = Math.ceil(min);
+		  max = Math.floor(max);
+		  return Math.floor(Math.random() * (max - min + 1)) + min;
+		},
+	 }
+	function render() {
 		//handle intro message on first key press
 		var startMsg = document.getElementById("start-message");
 
-		if ( !(model.keyPressedOnce) ) {
+		if ( !(hangManModel.keyPressedOnce) ) {
 			startMsg.innerHTML = "Press Any Key To Play!";
-			model.keyPressedOnce = true;
+			hangManModel.keyPressedOnce = true;
 			return;
 		} else {
 			startMsg.innerHTML = "Lets Play!";
@@ -53,14 +51,15 @@ var view = {
 		//render current score
 
 		var renderTarget = document.getElementById("score");
-		var wordWithDashes = this.obscureWordWithDashes(model.currentWord, model.lettersGuessed)
+		var wordWithDashes = obscureWordWithDashes(hangManModel.currentWord, hangManModel.lettersGuessed)
 
 		var textToRender = "current word: " + wordWithDashes + "<br>"
-						+ "number of guesses remaining: " + model.numGuessRemaining + "<br>"
-						+ "letters guessed: " + model.lettersGuessed + "<br>"
+						+ "number of guesses remaining: " + hangManModel.numGuessRemaining + "<br>"
+						+ "letters guessed: " + hangManModel.lettersGuessed + "<br>"
 		renderTarget.innerHTML = textToRender;
-	},
-	obscureWordWithDashes: function(word, charArr) {
+	}
+
+	function obscureWordWithDashes(word, charArr) {
 		var result = "";
 		for (var i = 0; i < word.length; i++) {
 			var charAt =  charArr.indexOf(word[i]);
@@ -71,76 +70,60 @@ var view = {
 			}
 		}
 		return result;
-
 	}
 
 
-
-
-}
-
-
-
-var controller = {
-	getRandomWord: function() {
+	function getRandomWord() {
 		return wordLibrary[util.getRandomIntInclusive(0, wordLibrary.length)]
-	},
-	onUserInput: function(event) {
+	}
+
+	function onUserInput(event) {
 		var key = event.key.toLowerCase();
 
-		if (model.currentWord.indexOf(key) > -1 && model.lettersGuessed.indexOf(key)=== -1) {
-			model.lettersGuessed.push(key)
+		if (hangManModel.currentWord.indexOf(key) > -1 && hangManModel.lettersGuessed.indexOf(key)=== -1) {
+			hangManModel.lettersGuessed.push(key)
 		}
 
-		if (model.numGuessRemaining < 1 ) {
-			controller.resetModel();
+		if (hangManModel.numGuessRemaining < 1 ) {
+			resetModel();
 
-			model.keyPressedOnce = false;
+			hangManModel.keyPressedOnce = false;
 
 		}
 
-	 	model.numGuessRemaining --;
+	 	hangManModel.numGuessRemaining --;
 
-		view.render()
+		render()
 
-	},
-	resetModel: function() {
-		model.currentWord = controller.getRandomWord();
+	}
+	function resetModel() {
+		hangManModel.currentWord = getRandomWord();
 
-		model.numGuessRemaining = model.currentWord.length + 5;
+		hangManModel.numGuessRemaining = hangManModel.currentWord.length + 5;
 
-		model.lettersGuessed = [];
+		hangManModel.lettersGuessed = [];
 
-		model.keyPressedOnce = false;
+		hangManModel.keyPressedOnce = false;
+		render()
 
 	}
 
+	var hangManModel = {
+		currentWord: null,
+		numGuessRemaining: null,
+		lettersGuessed: null,
+		keyPressedOnce: false,
 
-}
+	}
 
-var model = {
-	currentWord: null,
-	numGuessRemaining: null,
-	lettersGuessed: null,
-	keyPressedOnce: false,
-
-}
-
-var hangManApp = {
-	init: function() {
+	function init() {
 		//attach event listener
-		document.onkeyup = controller.onUserInput;
+		document.onkeyup = onUserInput;
 
 		//reset model
-		controller.resetModel();
+		resetModel();
 
-		view.render();
+		render();
 
-	},
-
-
-}
-
-hangManApp.init()
-
-
+	}
+init()
