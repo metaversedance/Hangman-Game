@@ -57,9 +57,9 @@
 		//handle intro message on first key press
 		var startMsg = document.getElementById("start-message");
 
-		if ( !(model.keyPressedOnce) ) {
+		if ( !(hangManModel.keyPressedOnce) ) {
 			startMsg.innerHTML = "Press Any Key To Play!";
-			model.keyPressedOnce = true;
+			hangManModel.keyPressedOnce = true;
 			return;
 		} else {
 			startMsg.innerHTML = "Lets Play!";
@@ -69,11 +69,11 @@
 		//render current score
 
 		var renderTarget = document.getElementById("score");
-		var wordWithDashes = obscureWordWithDashes(model.currentWord, model.lettersGuessed)
+		var wordWithDashes = obscureWordWithDashes(hangManModel.currentWord, hangManModel.lettersGuessed)
 
 		var textToRender = "current word: " + wordWithDashes + "<br>"
-						+ "number of guesses remaining: " + model.numGuessRemaining + "<br>"
-						+ "letters guessed: " + model.lettersGuessed + "<br>"
+						+ "number of guesses remaining: " + hangManModel.numGuessRemaining + "<br>"
+						+ "letters guessed: " + hangManModel.lettersGuessed + "<br>"
 		renderTarget.innerHTML = textToRender;
 	}
 //current word should be displayed with dashes obscuring letters not yet guessed -- done
@@ -107,31 +107,26 @@
 
 
 		//user loses
-		if (model.numGuessRemaining < 1 ) {
+		if (hangManModel.numGuessRemaining < 1 ) {
 			resetModel();
-			document.getElementById("start-message").textContent = "You Won!"
 			return;
 		} 
-
-
-
-
-
+		//user wins
 
 
 
 
 		//on input, character should be added to letters guessed -- done
 
-		if (model.lettersGuessed.indexOf(key)=== -1) {
-			model.lettersGuessed.push(key)
+		if (hangManModel.lettersGuessed.indexOf(key)=== -1) {
+			hangManModel.lettersGuessed.push(key)
 		}
 
 		
 
 		//subsequent key press should decriment number of guesses left -- done
 
-	 	model.numGuessRemaining --;
+	 	hangManModel.numGuessRemaining --;
 
 	}
 	function onUserInput(e) {
@@ -148,18 +143,18 @@
 	//number of guesses left: assigned length of current word + 5 -- done
 	//lettersGuessed: empty array -- done
 	function resetModel() {
-		model.currentWord = getRandomWord();
+		hangManModel.currentWord = getRandomWord();
 
-		model.numGuessRemaining = model.currentWord.length + 5;
+		hangManModel.numGuessRemaining = hangManModel.currentWord.length + 5;
 
-		model.lettersGuessed = [];
+		hangManModel.lettersGuessed = [];
 
-		model.keyPressedOnce = false;
+		hangManModel.keyPressedOnce = false;
 		render()
 
 	}
 
-	var model = {
+	var hangManModel = {
 		currentWord: null,
 		numGuessRemaining: null,
 		lettersGuessed: null,
